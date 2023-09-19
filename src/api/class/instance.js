@@ -16,6 +16,7 @@ const config = require('../../config/config')
 const downloadMessage = require('../helper/downloadMsg')
 const logger = require('pino')()
 const useMongoDBAuthState = require('../helper/mongoAuthState')
+const chatbotsProvide = require('../../chatbots/chatbots')
 
 class WhatsAppInstance {
     socketConfig = {
@@ -232,7 +233,7 @@ class WhatsAppInstance {
         // on new mssage
         sock?.ev.on('messages.upsert', async (m) => {
             //console.log('messages.upsert')
-            //console.log(m)
+            // console.log(m)
             if (m.type === 'prepend')
                 this.instance.messages.unshift(...m.messages)
             if (m.type !== 'notify') return
@@ -253,6 +254,8 @@ class WhatsAppInstance {
 
             m.messages.map(async (msg) => {
                 if (!msg.message) return
+
+                await chatbotsProvide(msg)
 
                 const messageType = Object.keys(msg.message)[0]
                 if (
