@@ -22,7 +22,7 @@ const astraBot = async (m) => {
     const inputText = m.message.extendedTextMessage.text
     const ctxReply = m.message.extendedTextMessage.contextInfo.quotedMessage?.conversation
     if(ctxReply){
-        const uuid = ctxReply.match(/#ASTRA(\d+)/i)[1]
+        const uuid = ctxReply.match(/#PD(\d+)/i)[1]
         const urlClient = process.env.URL_CLIENT_ASTRABOT || ""
         await axios.post(urlClient, {
             remoteJid,
